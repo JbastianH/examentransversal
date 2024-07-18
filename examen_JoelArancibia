@@ -1,110 +1,98 @@
-from datetime import date
-
-def mostrar_escenario(escenario):
-    print("\t\t\t ESCENARIO\n")
-    for numero1 in range(0, 50, 10):
-        fila = ""
-        for numero2 in range(10):
-            fila += f"{escenario[numero1 + numero2]}\t"
-        print(fila)
-    print("\n")
+import random
 
 
-def comprar_entradas(escenario):
-    precios = {1: 100000, 2: 100000, 3: 100000, 4: 100000, 5: 100000,   
-               6: 100000, 7: 100000, 8: 100000, 9: 100000, 10: 100000,
-               11: 100000, 12: 100000, 13: 100000, 14: 100000, 15: 100000,
-               16: 100000, 17: 100000, 18: 100000, 19: 100000, 20: 100000,
-               21: 50000, 22: 50000, 23: 50000, 24: 50000, 25: 50000,
-               26: 50000, 27: 50000, 28: 50000, 29: 50000, 30: 50000,
-               31: 10000, 32: 10000, 33: 10000, 34: 10000, 35: 10000,
-               36: 10000, 37: 10000, 38: 10000, 39: 10000, 40: 10000,
-               41: 10000, 42: 10000, 43: 10000, 44: 10000, 45: 10000,
-               46: 10000, 47: 10000, 48: 10000, 49: 10000, 50: 10000}
+def asignarSueldos(trabajadores, sueldoPorTrabajador):
 
-    print("Considere los siguiente precios \n VIP, $100.000. (Asientos 1 al 20) \n Normal, $50.000. (Asientos 21 al 30) \n Económico, $10.000. (Asientos 31 al 50)")
-        
-    cantidad = int(input("Ingrese la cantidad de entradas a comprar (1 o 2): "))
-    while cantidad < 1 or cantidad > 2:
-        print("Cantidad inválida.")
-        cantidad = int(input("Ingrese la cantidad de entradas a comprar (1 o 2): "))
-        
-    for _ in range(cantidad):
-        mostrar_escenario(escenario)
-        asiento = int(input("Seleccione el número del asiento que desea comprar: "))
-        while asiento > 50:
-            print("No hay asiento para el numero que ingresó, intente nuevamente")
-            asiento = int(input("Seleccione el número del asiento que desea comprar: "))
-        while escenario[asiento - 1] == 'X':
-            print("El asiento no está disponible intente de nuevo por favor.")
-            mostrar_escenario(escenario)
-            asiento = int(input("Seleccione el número del asiento que desea comprar: "))
-        escenario[asiento - 1] = 'X'
-        precio = precios[asiento]
-        run = int(input("Ingrese el RUN de la persona que ocupará el asiento (sin guión ni puntos): "))
-        runTotal.append(run)
-        print(f"Se ha comprado el asiento {asiento} por ${precio} para el RUN {run}.\n")
-        ganancias.append(precios.get(asiento))
+    print("¡Se han generado los sueldos exitosamente! y son los siguientes: ")
 
-def ganancia_total():
-        gananciaTotal = 0
-        for precio in ganancias:
-            gananciaTotal += precio
-        print("Su ganancia total es de: $", gananciaTotal)
+    for trabajador in trabajadores:
+        sueldoAleatorio = random.randint(300000, 2500000)
+        sueldoPorTrabajador[trabajador] = sueldoAleatorio
+    for trabajador, sueldo in sueldoPorTrabajador.items():
+        print(f"Trabajador: {trabajador}, Sueldo: ${sueldo}")
+        sueldos.append(sueldo)
 
-def lista_rut():
-        if len(runTotal) == 0:
-            print("Aún no se han comprado entradas")
-        else:
-            rutOrdenados = runTotal.copy()
-            rutOrdenados.sort()
-            print("Los rut que compraron entradas son los siguientes: ")
-            for rut in rutOrdenados:
-                print(rut)
+def clasificarSueldos(sueldoPorTrabajador):
+    for trabajador, sueldoUnitario in sueldoPorTrabajador.items():
+        contador = 0
+        if sueldoUnitario <= 800000:
+            contador += 1
+            print(f"Sueldos menores a $800.000 \t TOTAL: {contador}")
+            print(f"{trabajador}, ${sueldoUnitario}")
+        elif sueldoUnitario > 800000 and sueldoUnitario <=2000000:
+            contador = 0
+            contador += 1
+            print(f"Sueldos entre $800.000 y $2.000.000 \t TOTAL {contador}")
+            print(f"{trabajador}, ${sueldoUnitario}")
+        elif sueldoUnitario > 2000000:
+            contador = 0
+            contador += 1
+            print(f"Sueldos superiores a $2.000.000 \t TOTAL {contador}")
+            print(f"{trabajador}, ${sueldoUnitario}")
+
+
+def estadisticas(sueldos):
+    sueldoBajo = min(sueldos)
+    sueldoAlto = max(sueldos)
+    totalSueldos = 0
+    producto = 1
+    for valor in sueldos:
+        totalSueldos += valor
+        producto *= valor
+    promedioSueldos = totalSueldos / len(sueldos)
+    medioGeometrica = producto ** (1/len(sueldos))
+
+    print(f"El sueldo mas bajo es: ${sueldoBajo} \n El sueldo mas alto es: ${sueldoAlto} \n El promedio de sueldos es: ${promedioSueldos} \n La media geometrica es ${round(medioGeometrica)}")
+
+
+
+def reporteSueldos(sueldoPorTrabajador):
+    print("Nombre completo \t Sueldo base \t Descuento Salud \t Descuento AFP \t Sueldo liquido")
+    for trabajador, sueldo in sueldoPorTrabajador.items():
+        afp = round(sueldo * 0.12)
+        salud = round(sueldo * 0.7)
+        sueldoLiquido = sueldo - afp - salud
+        print(f"{trabajador} \t\t ${sueldo} \t ${salud} \t\t ${afp} \t ${sueldoLiquido}")
+
+
+def despedida():
+    print("", "Finalizando programa... \n Desarrollado por Joel Arancibia \n RUT 21.000.448-3")
+
+
 
 try:
-    ganancias = []
 
-    precios = {1: 100000, 2: 100000, 3: 100000, 4: 100000, 5: 100000,   
-                6: 100000, 7: 100000, 8: 100000, 9: 100000, 10: 100000,
-                11: 100000, 12: 100000, 13: 100000, 14: 100000, 15: 100000,
-                16: 100000, 17: 100000, 18: 100000, 19: 100000, 20: 100000,
-                21: 50000, 22: 50000, 23: 50000, 24: 50000, 25: 50000,
-                26: 50000, 27: 50000, 28: 50000, 29: 50000, 30: 50000,
-                31: 10000, 32: 10000, 33: 10000, 34: 10000, 35: 10000,
-                36: 10000, 37: 10000, 38: 10000, 39: 10000, 40: 10000,
-                41: 10000, 42: 10000, 43: 10000, 44: 10000, 45: 10000,
-                46: 10000, 47: 10000, 48: 10000, 49: 10000, 50: 10000}
+    sueldos = []
 
-    runTotal = []
-    escenario = []
-    for i in range(1, 51):
-        escenario.append(str(i))
+    trabajadores = ['Juan Perez', 'María Garcia','Carlos Lopez','Ana Martinez','Pedro Rodriguez','Laura Hernandez','Miguel Sanchez','Isabel Gomez','Francisco Diaz','Elena Fernandez']
 
+    sueldoPorTrabajador = {}
 
     while True:
-        print("1. Comprar entradas")
-        print("2. Mostrar ubicaciones disponibles")
-        print("3. Ver listado de asistentes")
-        print("4. Ganancias totales")
-        print("5. Salir")
+        print("", "1. Asignar sueldos aleatorios \n 2. Clasificar sueldos \n 3. Ver estadísticas \n 4. Reporte de sueldos \n 5. Salir del programa")
         opcion = input("Seleccione una opción: ")
         if opcion == '1':
-            if len(runTotal) == 50:
-                print("Ya se han agotado las entradas, estamos SOLD OUT")
-            else:
-                comprar_entradas(escenario)
+            asignarSueldos(trabajadores, sueldoPorTrabajador)
         elif opcion == '2':
-            mostrar_escenario(escenario)
+            if len(sueldoPorTrabajador) == 0:
+                print("Aun no se han generado sueldos")
+            else:
+                clasificarSueldos(sueldoPorTrabajador)
         elif opcion == '3':
-            lista_rut()
+            if len(sueldos) == 0:
+                print("Aun no se han registrado sueldos")
+            else:
+                estadisticas(sueldos)
         elif opcion == '4':
-            ganancia_total()
+            reporteSueldos(sueldoPorTrabajador)
         elif opcion == '5':
-            print(f"¡Gracias por utilizar el sistema de ventas para el concieto de Michael Jackson! \n \n Sanchez Producciones \n Joel Arancibia, {date.today()} \n")
+            despedida()
             break
         else:
-            print("Opción inválida. Por favor, seleccione nuevamente.\n")                        
+            print("Opcion invalida, intente nuevamente")
+
+
+
 
 except:
     print("Ha ocurrido un error")
